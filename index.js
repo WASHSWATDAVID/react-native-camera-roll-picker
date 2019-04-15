@@ -32,15 +32,12 @@ const nEveryRow = (data, n) => {
   let temp = [];
 
   for (let i = 0; i < data.length; ++i) {
-
-
-
-    if (i > 0 && i % n === 0) {
-      result.push(temp);
-      temp = [];
-    }
     const { node } = data[i];
-    if(node.group_name && (node.group_name.indexOf('roll') > -1 || node.group_name.indexOf('롤') > -1)){
+    if(node && node.group_name && (node.group_name.indexOf('roll') > -1 || node.group_name.indexOf('롤') > -1)){
+      if (i > 0 && i % n === 0) {
+        result.push(temp);
+        temp = [];
+      }
       temp.push(data[i]);
     }
     // temp.push(data[i]);
@@ -52,6 +49,8 @@ const nEveryRow = (data, n) => {
     }
     result.push(temp);
   }
+
+
 
   return result;
 };
@@ -109,7 +108,7 @@ class CameraRollPicker extends Component {
       newState.images = this.state.images.concat(assets);
       newState.data = nEveryRow(newState.images, this.props.imagesPerRow);
     }
-
+    // console.log('newState.data',newState.data);
     this.setState(newState);
   }
 
@@ -123,7 +122,7 @@ class CameraRollPicker extends Component {
     const { groupTypes, assetType } = this.props;
 
     const fetchParams = {
-      first: 100,
+      first: 500,
       groupTypes,
       assetType,
     };
@@ -236,14 +235,14 @@ class CameraRollPicker extends Component {
       );
     }
 
-    const flatListOrEmptyText = this.state.data.length > 0 ? (
+    const flatListOrEmptyText = this.state.data && this.state.data.length > 0 ? (
       <FlatList
         style={{ flex: 1 }}
         ListFooterComponent={this.renderFooterSpinner}
         initialNumToRender={initialNumToRender}
         onEndReached={this.onEndReached}
         renderItem={({ item }) => this.renderRow(item)}
-        keyExtractor={item => item[0].node.image.uri}
+        keyExtractor={item => item && item.length > 0 ? item[0].node.image.uri : null}
         data={this.state.data}
         extraData={this.state.selected}
       />
