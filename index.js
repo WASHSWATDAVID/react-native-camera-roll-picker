@@ -32,13 +32,21 @@ const nEveryRow = (data, n) => {
   let temp = [];
 
   for (let i = 0; i < data.length; ++i) {
-    const { node } = data[i];
-    if(node && node.group_name && (node.group_name.indexOf('roll') > -1 || node.group_name.indexOf('롤') > -1)){
+    if(Platform.OS === 'android'){
       if (i > 0 && i % n === 0) {
         result.push(temp);
         temp = [];
       }
       temp.push(data[i]);
+    }else{
+      const { node } = data[i];
+      if(node && node.group_name && (node.group_name.indexOf('roll') > -1 || node.group_name.indexOf('롤') > -1)){
+        if (i > 0 && i % n === 0) {
+          result.push(temp);
+          temp = [];
+        }
+        temp.push(data[i]);
+      }
     }
     // temp.push(data[i]);
   }
