@@ -40,7 +40,8 @@ const nEveryRow = (data, n) => {
       temp.push(data[i]);
     }else{
       const { node } = data[i];
-      if(node && node.group_name && (node.group_name.indexOf('roll') > -1 || node.group_name.indexOf('롤') > -1)){
+
+      if(node && node.group_name && (node.group_name.indexOf('roll') > -1 || node.group_name.indexOf('롤') > -1 || node.group_name.indexOf(`최근`) > -1)){
         if (i > 0 && i % n === 0) {
           result.push(temp);
           temp = [];
